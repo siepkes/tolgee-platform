@@ -2955,4 +2955,14 @@
             <column name="last_published" type="timestamp"/>
         </addColumn>
     </changeSet>
+    <changeSet author="jenik (generated)" id="1701253506661-1">
+        <createIndex indexName="IDX3vbfxy7bbtb4am22kbxdu8q01" tableName="keys_distance">
+            <column name="key2id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jenik (generated)" id="1701253506661-2">
+        <createIndex indexName="IDX9k594pjm6edcigab7mu2hq0s0" tableName="keys_distance">
+            <column name="key1id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

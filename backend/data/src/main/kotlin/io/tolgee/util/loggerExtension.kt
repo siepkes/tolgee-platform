@@ -35,7 +35,6 @@ inline fun <reified T> Logger.infoMeasureTime(message: String, block: () -> T): 
   return measureTime(message, this::info, block)
 }
 
-
 inline fun <reified T> Logger.measureTime(message: String, printFn: (String) -> Unit, block: () -> T): T {
   val (result, duration) = measureTimedValue(block)
   printFn("$message: $duration")
@@ -62,6 +61,3 @@ fun Logger.traceLogTimeSum(id: String, unit: DurationUnit = DurationUnit.MILLISE
     }
   }
 }
-
-
-

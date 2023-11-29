@@ -2,6 +2,7 @@ package io.tolgee.api.v2.controllers.v2KeyController
 
 import io.tolgee.ProjectAuthControllerTest
 import io.tolgee.development.testDataBuilder.data.KeysTestData
+import io.tolgee.dtos.RelatedKeyDto
 import io.tolgee.dtos.request.KeyInScreenshotPositionDto
 import io.tolgee.dtos.request.key.ComplexEditKeyDto
 import io.tolgee.dtos.request.key.KeyScreenshotDto
@@ -13,12 +14,15 @@ import io.tolgee.fixtures.isValidId
 import io.tolgee.fixtures.node
 import io.tolgee.model.enums.Scope
 import io.tolgee.service.ImageUploadService
+import io.tolgee.service.bigMeta.BigMetaService
 import io.tolgee.testing.annotations.ProjectApiKeyAuthTestMethod
+import io.tolgee.testing.assert
 import io.tolgee.testing.assertions.Assertions.assertThat
 import io.tolgee.util.generateImage
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.InputStreamSource
@@ -29,6 +33,9 @@ import java.math.BigDecimal
 class KeyControllerUpdateTest : ProjectAuthControllerTest("/v2/projects/") {
 
   lateinit var testData: KeysTestData
+
+  @Autowired
+  lateinit var bigMetaService: BigMetaService
 
   val screenshotFile: InputStreamSource by lazy {
     generateImage(2000, 3000)
@@ -139,6 +146,28 @@ class KeyControllerUpdateTest : ProjectAuthControllerTest("/v2/projects/") {
         tags = listOf()
       )
     ).andIsOk
+  }
+
+  @ProjectApiKeyAuthTestMethod(
+    scopes = [
+      Scope.TRANSLATIONS_EDIT,
+    ]
+  )
+  @Test
+  fun `stores big meta`() {
+    this.userAccount = testData.enOnlyUserAccount
+    performProjectAuthPut(
+      "keys/${testData.firstKey.id}/complex-update",
+      ComplexEditKeyDto(
+        name = testData.firstKey.name,
+        relatedKeysInOrder = mutableListOf(
+          RelatedKeyDto(null, "first_key"),
+          RelatedKeyDto(null, testData.firstKey.name)
+        )
+      )
+    ).andIsOk
+
+    bigMetaService.getCloseKeyIds(testData.firstKey.id).assert.hasSize(1)
   }
 
   @Test

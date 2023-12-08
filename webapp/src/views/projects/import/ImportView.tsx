@@ -1,14 +1,16 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { T, useTranslate } from '@tolgee/react';
-import { container } from 'tsyringe';
 
 import { LINKS, PARAMS } from 'tg.constants/links';
 import { parseErrorResponse } from 'tg.fixtures/errorFIxtures';
 import { confirmation } from 'tg.hooks/confirmation';
 import { useProject } from 'tg.hooks/useProject';
-import { MessageService } from 'tg.service/MessageService';
 import { components } from 'tg.service/apiSchema.generated';
+import { useGlobalActions } from 'tg.globalContext/GlobalContext';
+import { TranslatedError } from 'tg.translationTools/TranslatedError';
+import { messageService } from 'tg.service/MessageService';
+import LoadingButton from 'tg.component/common/form/LoadingButton';
 
 import { ImportAlertError } from './ImportAlertError';
 import { ImportConflictNotResolvedErrorDialog } from './component/ImportConflictNotResolvedErrorDialog';
@@ -17,12 +19,7 @@ import ImportFileInput from './component/ImportFileInput';
 import { ImportResult } from './component/ImportResult';
 import { useApplyImportHelper } from './hooks/useApplyImportHelper';
 import { useImportDataHelper } from './hooks/useImportDataHelper';
-import LoadingButton from 'tg.component/common/form/LoadingButton';
 import { BaseProjectView } from '../BaseProjectView';
-import { useGlobalActions } from 'tg.globalContext/GlobalContext';
-import { TranslatedError } from 'tg.translationTools/TranslatedError';
-
-const messageService = container.resolve(MessageService);
 
 export const ImportView: FunctionComponent = () => {
   const dataHelper = useImportDataHelper();

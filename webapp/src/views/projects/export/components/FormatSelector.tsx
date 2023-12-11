@@ -2,7 +2,7 @@ import { Field } from 'formik';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { useTranslate } from '@tolgee/react';
 
-export const FORMATS = ['JSON', 'XLIFF'] as const;
+export const FORMATS = ['JAVA_PROPERTIES', 'JSON', 'XLIFF'] as const;
 
 type Props = {
   className: string;

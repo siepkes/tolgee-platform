@@ -5,6 +5,7 @@ import io.tolgee.dtos.request.export.ExportFormat
 import io.tolgee.model.Language
 import io.tolgee.service.export.dataProvider.ExportTranslationView
 import io.tolgee.service.export.exporters.FileExporter
+import io.tolgee.service.export.exporters.JavaPropertiesExporter
 import io.tolgee.service.export.exporters.JsonFileExporter
 import io.tolgee.service.export.exporters.XliffFileExporter
 import org.springframework.stereotype.Component
@@ -18,6 +19,7 @@ class FileExporterFactory {
     baseLanguage: Language
   ): FileExporter {
     return when (exportParams.format) {
+      ExportFormat.JAVA_PROPERTIES -> JavaPropertiesExporter(data, exportParams)
       ExportFormat.JSON -> JsonFileExporter(data, exportParams)
       ExportFormat.XLIFF -> XliffFileExporter(data, exportParams, baseTranslationsProvider, baseLanguage)
     }
